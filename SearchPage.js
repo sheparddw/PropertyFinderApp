@@ -10,24 +10,6 @@ import {
 } from 'react-native';
 import SearchResults from './SearchResults';
 
-function urlForQueryAndPage(key, value, pageNumber) {
-    var data = {
-        country: 'uk',
-        pretty: '1',
-        encoding: 'json',
-        listing_type: 'buy',
-        action: 'search_listings',
-        page: pageNumber
-    };
-    data[key] = value;
-
-    var querystring = Object.keys(data)
-    .map(key => key + '=' + encodeURIComponent(data[key]))
-    .join('&');
-
-    return 'http://api.nestoria.co.uk/api?' + querystring;
-}
-
 class SearchPage extends Component {
     constructor(props) {
         super(props);
@@ -38,13 +20,33 @@ class SearchPage extends Component {
         };
     }
 
+    //Create Nestoria API URL to use from input.
+    urlForQueryAndPage(key, value, pageNumber) {
+        var data = {
+            country: 'uk',
+            pretty: '1',
+            encoding: 'json',
+            listing_type: 'buy',
+            action: 'search_listings',
+            page: pageNumber
+        };
+        data[key] = value;
+
+        var querystring = Object.keys(data)
+        .map(key => key + '=' + encodeURIComponent(data[key]))
+        .join('&');
+
+        return 'http://api.nestoria.co.uk/api?' + querystring;
+    }
+
+    //On Input Change.
     onSearchTextChanged(event){
         this.setState({searchString: event.nativeEvent.text});
     }
 
+    //Get results via Nestoria API.
     _executeQuery(query) {
-        console.log(query);
-        this.setState({isLoading: true});
+        this.setState({isLoading: true, message: ''});
         fetch(query)
             .then(response => response.json())
             .then(json => this._handleResponse(json.response))
@@ -56,6 +58,7 @@ class SearchPage extends Component {
             );
     }
 
+    //If results, 
     _handleResponse(response) {
         this.setState({isLoading: false, message: ''});
         if(response.application_response_code.substr(0,1) === '1'){
@@ -70,9 +73,28 @@ class SearchPage extends Component {
         }
     }
 
+    //Run search.
     onSearchPressed() {
-        var query = urlForQueryAndPage('place_name', this.state.searchString, 1);
+        var query = this.urlForQueryAndPage('place_name', this.state.searchString, 1);
         this._executeQuery(query);
+    }
+
+    //Get User's location.
+    onLocationPressed() {
+        navigator.geolocation.getCurrentPosition(
+            location => {
+                console.log(location);
+                var search = location.coords.latitude + ',' + location.coords.longitude;
+                this.setState({searchString: search});
+                var query = this.urlForQueryAndPage('centre_point', search, 1);
+                this._executeQuery(query);
+            },
+            error => {
+                this.setState({
+                    message: 'There was a problem with obtaining your location: ' + error
+                });
+            }
+        );
     }
 
     render() {
@@ -105,6 +127,7 @@ class SearchPage extends Component {
                 </View>
                 <TouchableHighlight style={styles.button}
                     underlayColor='#99d9f4'
+                    onPress={this.onLocationPressed.bind(this)}
                 >
                     <Text style={styles.buttonText}>Location</Text>
                 </TouchableHighlight>
@@ -166,4 +189,7 @@ const styles = StyleSheet.create({
         height: 138
     }
 });
+
+
+
 module.exports = SearchPage;
