@@ -1,8 +1,6 @@
-'use strict';
 /**
- * Property Finder
- * https://www.raywenderlich.com/126063/react-native-tutorial
- * @flow
+ * Property Finder React Native App
+ * Author: Daniel Shepard
  */
 
 import React, { Component } from 'react';

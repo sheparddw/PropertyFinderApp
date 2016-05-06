@@ -23,6 +23,7 @@ class SearchPage extends Component {
 
 
     //Create Nestoria API URL to use from input.
+    //API Docs: http://www.nestoria.co.uk/help/api
     urlForQueryAndPage(key, value, pageNumber) {
         var data = {
             country: 'uk',
