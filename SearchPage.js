@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#48BBEC',
         borderColor: '#48BBEC',
         borderWidth: 1,
-        borderRadius: 8,
         marginBottom: 10,
         alignSelf: 'stretch',
         justifyContent: 'center'
@@ -197,7 +196,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         borderWidth: 1,
         borderColor: '#48BBEC',
-        borderRadius: 8,
         color: '#48BBEC'
     },
     image: {
