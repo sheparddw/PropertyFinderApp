@@ -4,11 +4,17 @@ import {
     Image,
     View,
     Text,
-    Component
+    Component,
+    TouchableHighlight,
+    Linking
 } from 'react-native';
 
 class DetailsPage extends Component {
     
+    //Open More Details page.
+    openUrl(url) {
+        Linking.openURL(url).catch(err => console.error('An error occurred', err));
+    }
 
     render() {
         var property = this.props.property;
@@ -17,7 +23,9 @@ class DetailsPage extends Component {
             stats += ', ' + property.bathroom_number + ' ' + (property.bathroom_number > 1 ? 'bathrooms' : 'bathroom');
         }
 
+        //Returns pound symbol and price number.
         var price = property.price_formatted;
+        const url = property.lister_url;
 
         return (
             <View style={styles.container}>
@@ -31,6 +39,10 @@ class DetailsPage extends Component {
                 </View>
                 <Text style={styles.description}>{stats}</Text>
                 <Text style={styles.description}>{property.summary}</Text>
+
+                <TouchableHighlight style={styles.button}>
+                    <Text style={styles.buttonText} onPress={el => this.openUrl(url)}>More Details</Text>
+                </TouchableHighlight>
             </View>
         );
     }
@@ -66,6 +78,22 @@ const styles = StyleSheet.create({
         fontSize: 18,
         margin: 5,
         color: '#656565'
+    },
+    buttonText: {
+        fontSize: 18,
+        color: 'white',
+        alignSelf: 'center'
+    },
+    button: {
+        height: 36,
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: '#48BBEC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        margin: 10,
+        alignSelf: 'stretch',
+        justifyContent: 'center'
     }
 });
 

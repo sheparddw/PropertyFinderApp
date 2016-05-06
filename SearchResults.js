@@ -21,7 +21,9 @@ class SearchResults extends Component {
         };
     }
 
+    //Pass data into this to render rows of properties.
     renderRow(rowData, sectionID, rowID) {
+        //Returns pound symbol and number (£440,000).
         var price = rowData.price_formatted;
 
         return (
@@ -47,6 +49,8 @@ class SearchResults extends Component {
             </TouchableHighlight>
         );
     }
+
+    //Load Details page.
     rowPressed(propertyGuid) {
         var property = this.props.listings.filter(prop => prop.guid === propertyGuid)[0];
 

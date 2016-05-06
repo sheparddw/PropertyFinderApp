@@ -6,7 +6,8 @@ import {
     View,
     TouchableHighlight,
     ActivityIndicatorIOS,
-    Image
+    Image,
+    Linking
 } from 'react-native';
 import SearchResults from './SearchResults';
 
@@ -19,6 +20,7 @@ class SearchPage extends Component {
             message: ''
         };
     }
+
 
     //Create Nestoria API URL to use from input.
     urlForQueryAndPage(key, value, pageNumber) {
@@ -62,15 +64,21 @@ class SearchPage extends Component {
     _handleResponse(response) {
         this.setState({isLoading: false, message: ''});
         if(response.application_response_code.substr(0,1) === '1'){
+            var listings = this.addGuid(response.listings);
             this.props.navigator.push({
                 title: 'Results',
                 component: SearchResults,
-                passProps: {listings: response.listings}
+                passProps: {listings: listings}
             });
         } else {
             this.setState({message: 'Location not recognized: please try again.'});
             console.log(response);
         }
+    }
+
+    addGuid(properties) {
+        properties.map((prop, index) => prop.guid = index);
+        return properties;
     }
 
     //Run search.
@@ -83,7 +91,6 @@ class SearchPage extends Component {
     onLocationPressed() {
         navigator.geolocation.getCurrentPosition(
             location => {
-                console.log(location);
                 var search = location.coords.latitude + ',' + location.coords.longitude;
                 this.setState({searchString: search});
                 var query = this.urlForQueryAndPage('centre_point', search, 1);
@@ -95,6 +102,12 @@ class SearchPage extends Component {
                 });
             }
         );
+    }
+
+    //Link to Nestoria.
+    openNestoriaLink() {
+        const url = 'http://www.nestoria.com/';
+        Linking.openURL(url).catch(err => console.error('An error occurred', err));
     }
 
     render() {
@@ -134,6 +147,7 @@ class SearchPage extends Component {
                 <Image source={require('./Resources/house.png')} style={styles.image}/>
                 {spinner}
                 <Text style={styles.description}>{this.state.message}</Text>
+                <Text style={styles.description} onPress={this.openNestoriaLink}>Data provided by Nestoria</Text>
             </View>
         );
     }
@@ -189,7 +203,5 @@ const styles = StyleSheet.create({
         height: 138
     }
 });
-
-
 
 module.exports = SearchPage;
