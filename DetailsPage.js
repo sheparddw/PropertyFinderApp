@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
         marginTop: 65
     },
     heading: {
-        backgroundColor: '#f8f8f8'
+        backgroundColor: '#f8f8f8',
+        padding: 10
     },
     separator: {
         height: 1,
@@ -77,7 +78,9 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 18,
         margin: 5,
-        color: '#656565'
+        color: '#656565',
+        paddingRight: 10,
+        paddingLeft: 10
     },
     buttonText: {
         fontSize: 18,

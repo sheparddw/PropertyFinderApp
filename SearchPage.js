@@ -76,6 +76,7 @@ class SearchPage extends Component {
         }
     }
 
+    //API no longer returns GUID, so add one for correct navigation to details page.
     addGuid(properties) {
         properties.map((prop, index) => prop.guid = index);
         return properties;
