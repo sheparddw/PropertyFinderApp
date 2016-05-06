@@ -1,6 +1,7 @@
 /**
  * Property Finder React Native App
  * Author: Daniel Shepard
+ * https://github.com/sheparddw/PropertyFinder
  */
 
 import React, { Component } from 'react';
